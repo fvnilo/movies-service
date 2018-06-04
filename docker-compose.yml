@@ -1,0 +1,20 @@
+version: '3.4'
+services:
+  db:
+    image: mongo:3.6-jessie
+    expose:
+      - 27017
+    volumes:
+      - ./data:/data/db
+    command: "--smallfiles --logpath=/dev/null"
+  movies-service:
+    build: .
+    ports:
+      - "3000:3000"
+    links:
+      - db
+    depends_on:
+      - db
+    environment:
+      - DB_SERVER=db
+      - DB_NAME=movies

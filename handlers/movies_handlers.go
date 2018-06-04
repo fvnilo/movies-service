@@ -4,15 +4,14 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
-	"github.com/nylo-andry/movies-service/config"
 	"github.com/nylo-andry/movies-service/models"
 	"github.com/nylo-andry/movies-service/repository"
 	"gopkg.in/mgo.v2/bson"
 )
 
-var dbConfig = config.Config{}
 var movieRepository = repository.MovieRepository{}
 
 // AllMoviesEndPoint returns a collection of all the movies in the database
@@ -110,12 +109,13 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 }
 
 func init() {
-	dbConfig.Read()
+	dbServer := os.Getenv("DB_SERVER")
+	dbName := os.Getenv("DB_NAME")
 
-	movieRepository.Server = dbConfig.Server
-	movieRepository.Database = dbConfig.Database
+	movieRepository.Server = dbServer
+	movieRepository.Database = dbName
 
-	log.Printf("Initializing server connection on [%s] [%s]", dbConfig.Server, dbConfig.Database)
+	log.Printf("Initializing server connection on [%s]:[%s]", dbServer, dbName)
 
 	movieRepository.Connect()
 }
