@@ -17,7 +17,7 @@ DB_SERVER=localhost DB_NAME=movies go run main.go
 ### With Docker
 
 ```
-docker-compose up.
+docker-compose up --build
 ```
 
 ## Configuration
